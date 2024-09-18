@@ -134,7 +134,7 @@ tag to tell browsers to render the gaps.
           <label htmlFor="wd-text-fields-last-name">Last name:</label>
           <input type="text" id="wd-text-fields-last-name" placeholder="Doe"
             value="Wonderland" title="The last name" />
-          {/* copy rest of form elements here  */}
+   
         </form>
       </div>
 
@@ -229,14 +229,6 @@ tag to tell browsers to render the gaps.
         <h4>Anchor tag</h4>
         Please <a id="wd-lipsum" href="https://www.lipsum.com">click here</a> to get dummy text<br/>
         <a id="wd-github" href="https://github.com/Liheng-Yi/kanbas-react-web-app">GitHub Repository</a>
-
-
-
-
-
-
-
-
 
     </div>
   );
