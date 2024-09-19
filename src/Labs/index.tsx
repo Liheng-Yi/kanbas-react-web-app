@@ -6,7 +6,7 @@ import Lab3 from "./Lab3";
 export default function Labs() {
   return (
     <div>
-      <h1>Liheng Yi</h1>
+      <h1>Liheng Yi Section: CS5610.20595.202510 ID: 002818453</h1>
       <h1>Labs</h1>
       <TOC />
       
