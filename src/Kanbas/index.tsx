@@ -9,13 +9,15 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Kanbas() {
-  const navigate = useNavigate();  // Create a navigate function using the hook
+  const navigate = useNavigate();  
   const goToLab1 = () => {
-    navigate('/Labs/Lab1');  // Adjust the route as needed for your routing setup
+    navigate('/Labs/Lab1');  
   };
 
   return (
+    
     <div id="wd-kanbas">
+
       <button onClick={() => goToLab1()}>Go back to Landing page</button>
       <table>
         <tr>
@@ -23,6 +25,7 @@ export default function Kanbas() {
             <KanbasNavigation />
           </td>
           <td valign="top">
+            
             <Routes>
               <Route path="/" element={<Navigate to="/Kanbas/Account" />} />
               <Route path="/Account/*" element={<Account />} />
