@@ -4,27 +4,18 @@ const Padding = () => {
   return (
     <div id="wd-css-paddings">
       <h2>Padding</h2>
-      <div className="wd-padded-top-left wd-border-fat 
-      wd-border-red wd-border-solid 
-      wd-bg-color-yellow">
-    Padded top left
-  </div>
+      <div className="pt-5 ps-5 border border-5 border-danger bg-warning">
+        Padded top left
+      </div>
 
+      <div className="pb-5 pe-5 border border-5 border-primary bg-warning">
+        Padded bottom right
+      </div>
 
-
-
-  <div className="wd-padded-bottom-right wd-border-fat 
-      wd-border-blue wd-border-solid 
-      wd-bg-color-yellow">
-    Padded bottom right
-  </div>
-
-  <div className="wd-padding-fat wd-border-fat 
-      wd-border-yellow wd-border-solid 
-      wd-bg-color-blue wd-fg-color-white">
-    Padded all around
-  </div>
-</div>
+      <div className="p-5 border border-5 border-warning bg-primary text-white">
+        Padded all around
+      </div>
+    </div>
   );
 };
 
