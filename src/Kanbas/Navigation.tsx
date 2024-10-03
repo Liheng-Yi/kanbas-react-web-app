@@ -16,7 +16,7 @@ export default function KanbasNavigation() {
         className="list-group-item bg-black border-0 text-center">
         <img src="/images/NEU.png" width="75px" /></a>
       <Link to="/Kanbas/Account" id="wd-account-link"
-        className={`list-group-item text-center border-0 ${location.pathname === '/Kanbas/Account/Signin' ? 'bg-white text-danger' : 'bg-black text-white'} d-flex flex-column align-items-center`}>
+        className={`list-group-item text-center border-0 ${location.pathname === '/Kanbas/Account/Signin' || location.pathname === '/Kanbas/Account/Signup' || location.pathname === '/Kanbas/Account/Profile' ? 'bg-white text-danger' : 'bg-black text-white'} d-flex flex-column align-items-center`}>
         <FaRegCircleUser className="fs-1 text-white" />
         Account </Link>
       <Link to="/Kanbas/Dashboard" id="wd-dashboard-link"

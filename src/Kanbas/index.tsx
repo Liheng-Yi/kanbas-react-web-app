@@ -19,7 +19,7 @@ export default function Kanbas() {
     
     <div id="wd-kanbas">
 
-      <button onClick={() => goToLab1()}>Go back to Landing page</button>
+      <button onClick={() => goToLab1()} className="wd-main-content-offset ms-5 btn btn-secondary" >Go back to Landing page</button>
 
             <KanbasNavigation />
 
