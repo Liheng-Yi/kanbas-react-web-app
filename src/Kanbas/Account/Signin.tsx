@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import "./style.css";
+
 export default function Signin() {
   return (
     <div id="wd-signin-screen">
@@ -14,5 +16,6 @@ export default function Signin() {
             className="btn btn-primary w-100">
             Sign in </Link><br />
       <Link id="wd-signup-link" to="/Kanbas/Account/Signup">Sign up</Link>
+
     </div>
 );}

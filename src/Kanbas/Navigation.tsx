@@ -39,6 +39,7 @@ export default function KanbasNavigation() {
         className={`list-group-item text-center border-0 ${location.pathname === '/Labs' ? 'bg-white text-danger' : 'bg-black text-white'} d-flex flex-column align-items-center`}>
         <LiaCogSolid className="fs-1 text-danger" />
         Labs </Link>
+        
     </div>
   );
 }
