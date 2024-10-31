@@ -1,6 +1,13 @@
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function AccountNavigation() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = () => {
+    return currentUser?.role === "FACULTY";
+  };
+  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+  
   return (
 <div id="wd-account-navigation" className="wd list-group fs-5 " style={{ lineHeight: '1' }}>
   <NavLink to="/Kanbas/Account/Signin" className={({ isActive }) => 

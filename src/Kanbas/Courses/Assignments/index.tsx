@@ -1,58 +1,217 @@
-import { BsGripVertical, BsPlus } from "react-icons/bs";
-import LessonControlButtons from "../Modules/LessonControlButtons";
-import "./style.css"
-import { IoEllipsisVertical } from "react-icons/io5";
-import { FaEdit } from "react-icons/fa";
-import { BsChevronExpand } from "react-icons/bs";
-import { Assignment, assignments } from "../../Database";
-import { useParams } from "react-router";
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { BsGripVertical, BsPlus, BsChevronExpand } from 'react-icons/bs';
+import { IoEllipsisVertical } from 'react-icons/io5';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { deleteAssignment } from './reducer';
 
-export default function Assignments() {
+interface Assignment {
+    _id: string;
+    title: string;
+    description: string;
+    points: number;
+    dueDate: string;
+    availableFromDate: string;
+    course: string;
+    module: string;
+}
+
+const Assignments = () => {
     const { cid } = useParams();
-    const courseAssignments = assignments.filter((assignment: Assignment) => assignment.course === cid);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    
+    const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [assignmentToDelete, setAssignmentToDelete] = useState<Assignment | null>(null);
+    
+    const courseAssignments = assignments.filter(
+        (assignment: Assignment) => assignment.course === cid
+    );
+
+    const isFaculty = () => currentUser?.role === "FACULTY";
+
+    useEffect(() => {
+        // Add modal-open class to body when modal is shown
+        if (showDeleteModal) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+
+        // Cleanup on unmount
+        return () => {
+            document.body.classList.remove('modal-open');
+        };
+    }, [showDeleteModal]);
+
+    const handleDeleteClick = (e: React.MouseEvent, assignment: Assignment) => {
+        e.stopPropagation();
+        setAssignmentToDelete(assignment);
+        setShowDeleteModal(true);
+    };
+
+    const handleConfirmDelete = () => {
+        try {
+            if (assignmentToDelete) {
+                dispatch(deleteAssignment(assignmentToDelete._id));
+            }
+        } catch (error) {
+            console.error('Error deleting assignment:', error);
+        } finally {
+            setShowDeleteModal(false);
+            setAssignmentToDelete(null);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false);
+        setAssignmentToDelete(null);
+    };
+
+    const handleAddAssignment = () => {
+        navigate(`/Kanbas/Courses/${cid}/Assignments/new`);
+    };
+
+    const handleEditAssignment = (e: React.MouseEvent, assignmentId: string) => {
+        e.stopPropagation();
+        navigate(`/Kanbas/Courses/${cid}/Assignments/${assignmentId}`);
+    };
 
     return (
-        <div id="wd-assignments" className="container mt-3">
-            <div className="d-flex mb-3">
-                <input type="text" id="wd-search-assignment" className="form-control me-5" placeholder="🔍 Search..." aria-label="Search for Assignments" aria-describedby="button-addon2" style={{ maxWidth: "230px" }} />
-                <button className="btn btn-light me-2">+ Group</button>
-                <button className="btn btn-danger">+ Assignment</button>
-            </div>
-            <ul className="list-group rounded-0">
-                <div className="wd-title p-3 ps-2" style={{ backgroundColor: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div className="d-flex align-items-center mb-3">
-                        <BsGripVertical className="fs-3 me-2" />
-                        <BsChevronExpand className="me-2" />
-                        <h3 id="wd-assignments-title">ASSIGNMENTS</h3>
-                    </div>
-                    <div>
-                        <span className="circle-percent me-1" style={{ fontSize: "1.2rem", backgroundColor: "#f0f0f0" }}>40% of Total</span>
-                        <BsPlus className="fs-4 me-2" />
-                        <IoEllipsisVertical className="fs-4" />
-                    </div>
+        <>
+            <div className="container mt-3">
+                <div className="d-flex mb-3">
+                    <input 
+                        type="text" 
+                        className="form-control me-5" 
+                        placeholder="🔍 Search..." 
+                        style={{ maxWidth: "230px" }} 
+                    />
+                    {isFaculty() && (   
+                        <>
+                            <button className="btn btn-light me-2">+ Group</button>
+                            <button 
+                                className="btn btn-danger" 
+                                onClick={handleAddAssignment}
+                            >
+                                + Assignment
+                            </button>
+                        </>
+                    )}
                 </div>
-                <div className="list-item-border">
-                    {courseAssignments.map((assignment: Assignment) => (
-                        <li key={assignment._id} className="list-group-item d-flex align-items-center">
-                            <BsGripVertical className="me-2 fs-3" />
-                            <FaEdit size={30} color="green" className="me-3"/>
-                            <div className="flex-grow-1">
-                                <a className="wd-assignment-link stretched-link" href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
-                                    {assignment.title}
-                                </a>
-                                <p>
-                                    <span style={{ color: 'red' }}>{assignment.module}</span> |
-                                    <span style={{ fontWeight: 'bold' }}>Not available Until</span> |
-                                    <span>{assignment.availableFromDate}</span> |
-                                    <br/>
-                                    <span>Due {assignment.dueDate} | {assignment.points} pts</span>
-                                </p>
+                
+                <ul className="list-group rounded-0">
+                    <div className="p-3 ps-2" style={{ backgroundColor: '#f0f0f0' }}>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex align-items-center">
+                                <BsGripVertical className="fs-3 me-2" />
+                                <BsChevronExpand className="me-2" />
+                                <h3 className="mb-0">ASSIGNMENTS</h3>
                             </div>
-                            <LessonControlButtons />
-                        </li>
-                    ))}
-                </div>
-            </ul>
-        </div>
+                            <div>
+                                <span className="me-1" style={{ fontSize: "1.2rem" }}>
+                                    40% of Total
+                                </span>
+                                <BsPlus className="fs-4 me-2" />
+                                <IoEllipsisVertical className="fs-4" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        {courseAssignments.map((assignment: Assignment) => (
+                            <li 
+                                key={assignment._id} 
+                                className="list-group-item d-flex align-items-center"
+                            >
+                                <BsGripVertical className="me-2 fs-3" />
+                                {isFaculty() && (
+                                    <FaEdit 
+                                        size={30} 
+                                        color="green" 
+                                        className="me-3 cursor-pointer"
+                                        onClick={(e) => handleEditAssignment(e, assignment._id)}
+                                    />
+                                )}
+                                <div 
+                                    className="flex-grow-1"
+                                    onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <span>{assignment.title}</span>
+                                    </div>
+                                    <p className="mb-0">
+                                        <span className="text-danger">{assignment.module}</span>
+                                        {' | '}
+                                        <strong>Not available Until</strong>
+                                        {' | '}
+                                        <span>{assignment.availableFromDate || 'Not set'}</span>
+                                        <br/>
+                                        <span>
+                                            Due {assignment.dueDate || 'Not set'} | {assignment.points} pts
+                                        </span>
+                                    </p>
+                                </div>
+                                {isFaculty() && (
+                                    <button 
+                                        className="btn text-danger border-0"
+                                        onClick={(e) => handleDeleteClick(e, assignment)}
+                                    >
+                                        <FaTrash size={20} />
+                                    </button>
+                                )}
+                            </li>
+                        ))}
+                    </div>
+                </ul>
+            </div>
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <>
+                    <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                        <div className="modal-dialog" style={{ zIndex: 1056 }}>
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Delete Assignment</h5>
+                                    <button 
+                                        type="button" 
+                                        className="btn-close" 
+                                        onClick={handleCancelDelete}
+                                    />
+                                </div>
+                                <div className="modal-body">
+                                    Are you sure you want to delete "{assignmentToDelete?.title}"? 
+                                    This action cannot be undone.
+                                </div>
+                                <div className="modal-footer">
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-secondary" 
+                                        onClick={handleCancelDelete}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-danger" 
+                                        onClick={handleConfirmDelete}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+        </>
     );
-}
+};
+
+export default Assignments;
