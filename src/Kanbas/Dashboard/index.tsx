@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import * as db from "../Database";
+
 import { useSelector, useDispatch } from "react-redux";
 import { enrollInCourse, toggleShowAllCourses } from "./reducer";
 import { unenrollFromCourse } from "./reducer";
@@ -22,16 +22,6 @@ export default function Dashboard(
   const isFaculty = () => currentUser?.role === "FACULTY";
   const isStudent = () => currentUser?.role === "STUDENT";
   const dispatch = useDispatch();
-
-  const filteredCourses = showAllCourses 
-    ? courses 
-    : courses.filter((course) =>
-        enrollments.some(
-          (enrollment: any) =>
-            enrollment.user === currentUser?._id &&
-            enrollment.course === course._id
-        ));
-
 
   const isEnrolled = (courseId: string) => {
     return enrollments.some(
@@ -108,13 +98,13 @@ export default function Dashboard(
       )}
 
       <h2 id="wd-dashboard-published">
-        Published Courses ({filteredCourses.length})
+        Published Courses ({courses.length})
       </h2>
       <hr />
 
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {filteredCourses.map((course: any) => (
+          {courses.map((course: any) => (
             <div
               key={course._id}
               className="wd-dashboard-course col"

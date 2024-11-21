@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BsGripVertical, BsPlus, BsChevronExpand } from 'react-icons/bs';
 import { IoEllipsisVertical } from 'react-icons/io5';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { deleteAssignment } from './reducer';
+import { setAssignment, deleteAssignment } from './reducer';
+import * as assignmentsClient from "./client";
 
 interface Assignment {
     _id: string;
@@ -33,6 +34,21 @@ const Assignments = () => {
     );
 
     const isFaculty = () => currentUser?.role === "FACULTY";
+    const fetchAssignments = async () => {
+        const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignment(assignments));
+        console.log("Assignments fetched:", assignments);
+    };
+
+    useEffect(() => {
+        fetchAssignments();
+    }, [cid]);
+
+    const removeAssignment = async (assignmentId: string) => {
+        await assignmentsClient.removeAssignment(assignmentId);
+        dispatch(deleteAssignment(assignmentId));
+
+    };
 
     useEffect(() => {
         // Add modal-open class to body when modal is shown
@@ -50,20 +66,20 @@ const Assignments = () => {
 
     const handleDeleteClick = (e: React.MouseEvent, assignment: Assignment) => {
         e.stopPropagation();
+        console.log("Delete clicked for assignment:", assignment);
         setAssignmentToDelete(assignment);
         setShowDeleteModal(true);
     };
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         try {
             if (assignmentToDelete) {
-                dispatch(deleteAssignment(assignmentToDelete._id));
+                await removeAssignment(assignmentToDelete._id);
+                setShowDeleteModal(false);
+                setAssignmentToDelete(null);
             }
         } catch (error) {
             console.error('Error deleting assignment:', error);
-        } finally {
-            setShowDeleteModal(false);
-            setAssignmentToDelete(null);
         }
     };
 
@@ -160,7 +176,7 @@ const Assignments = () => {
                                 {isFaculty() && (
                                     <button 
                                         className="btn text-danger border-0"
-                                        onClick={(e) => handleDeleteClick(e, assignment)}
+                                        onClick={(e) => removeAssignment(assignment._id)}
                                     >
                                         <FaTrash size={20} />
                                     </button>
@@ -193,6 +209,7 @@ const Assignments = () => {
                                     <button 
                                         type="button" 
                                         className="btn btn-secondary" 
+                                        
                                         onClick={handleCancelDelete}
                                     >
                                         Cancel
