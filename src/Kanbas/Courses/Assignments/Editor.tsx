@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as client from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const assignment = useSelector((state: any) => state.assignmentsReducer.assignment);
+  const assignments = useSelector((state: any) => state.assignmentsReducer.assignments);
+
   const [currentAssignment, setCurrentAssignment] = useState({
     title: "",
     description: "",
@@ -17,27 +19,25 @@ export default function AssignmentEditor() {
     course: cid,
     module: "",
   });
-    const assignments = useSelector((state: any) => 
-    state.assignmentsReducer.assignments
-  );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
       const newAssignment = {
         ...currentAssignment,
-        _id: aid || new Date().getTime().toString(),
-        module: currentAssignment.module || "Module 1",
-        course: cid
+        course: cid,
+        module: currentAssignment.module || "Module 1"
       };
 
       if (aid) {
-        dispatch(updateAssignment(newAssignment));
+        const updated = await client.updateAssignment(aid, newAssignment);
+        dispatch(updateAssignment(updated));
       } else {
-        dispatch(addAssignment(newAssignment));
+        const created = await client.createAssignment(newAssignment);
+        dispatch(addAssignment(created));
       }
       navigate(`/Kanbas/Courses/${cid}/Assignments`);
     } catch (error) {
-      console.error("Error in handleSave:", error);
+      console.error("Error saving assignment:", error);
     }
   };
 

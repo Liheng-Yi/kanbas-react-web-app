@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { BsGripVertical, BsPlus, BsChevronExpand } from 'react-icons/bs';
 import { IoEllipsisVertical } from 'react-icons/io5';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { setAssignment, deleteAssignment } from './reducer';
+import { setAssignments, deleteAssignment } from './reducer';
 import * as assignmentsClient from "./client";
 
 interface Assignment {
@@ -32,22 +32,29 @@ const Assignments = () => {
     const courseAssignments = assignments.filter(
         (assignment: Assignment) => assignment.course === cid
     );
+    console.log("11Assignments:", assignments);
 
     const isFaculty = () => currentUser?.role === "FACULTY";
     const fetchAssignments = async () => {
-        const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
-        dispatch(setAssignment(assignments));
-        console.log("Assignments fetched:", assignments);
+        try {
+            const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
+            dispatch(setAssignments(assignments));
+        } catch (error) {
+            console.error("Error fetching assignments:", error);
+        }
     };
 
     useEffect(() => {
         fetchAssignments();
-    }, [cid]);
+    }, []);
 
     const removeAssignment = async (assignmentId: string) => {
-        await assignmentsClient.removeAssignment(assignmentId);
-        dispatch(deleteAssignment(assignmentId));
-
+        try {
+            await assignmentsClient.removeAssignment(assignmentId);
+            dispatch(deleteAssignment(assignmentId));
+        } catch (error) {
+            console.error("Error removing assignment:", error);
+        }
     };
 
     useEffect(() => {
@@ -176,7 +183,7 @@ const Assignments = () => {
                                 {isFaculty() && (
                                     <button 
                                         className="btn text-danger border-0"
-                                        onClick={(e) => removeAssignment(assignment._id)}
+                                        onClick={(e) => handleDeleteClick(e, assignment)}
                                     >
                                         <FaTrash size={20} />
                                     </button>
