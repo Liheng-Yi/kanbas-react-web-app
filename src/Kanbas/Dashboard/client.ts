@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000";
-const ENROLLMENTS_API = `${API_BASE}/api/enrollments`;
+const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+const ENROLLMENTS_API = `${REMOTE_SERVER}/api/enrollments`;
 
 export const findAllEnrollments = async () => {
   const response = await axios.get(ENROLLMENTS_API);

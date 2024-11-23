@@ -1,6 +1,6 @@
 import axios from "axios";
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
-const ASSIGNMENTS_URL = `${API_BASE}/assignments`;
+const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+const ASSIGNMENTS_URL = `${REMOTE_SERVER}/api/assignments`;
 
 export const findAssignmentsForCourse = async (courseId: string) => {
   const response = await axios.get(`${ASSIGNMENTS_URL}/course/${courseId}`);
