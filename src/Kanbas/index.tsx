@@ -27,7 +27,7 @@ export default function Kanbas() {
     navigate('/Labs/Lab1');  
   };
   //courses
-    const [courses, setCourses] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const fetchCourses = async () => {
     let courses = [];
     try {
@@ -67,11 +67,12 @@ export default function Kanbas() {
   };
 
   const findAllCourses = async () => {
-    
+    const courses = await courseClient.fetchAllCourses();
+    setCourses(courses);
   };
 
   useEffect(() => {
-    
+    findAllCourses();
   }, []);
 
   return (
@@ -86,6 +87,7 @@ export default function Kanbas() {
             <Route path="/" element={<Navigate to="/Kanbas/Dashboard" />} />
             <Route path="/Account/*" element={<Account />} />
             <Route path="Dashboard" element={ <ProtectedRoute>
+            console.log(courses)
               <Dashboard
                 courses={courses}
                 course={course}
