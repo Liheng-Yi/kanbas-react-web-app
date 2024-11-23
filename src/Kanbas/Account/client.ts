@@ -15,6 +15,7 @@ export const findMyCourses = async () => {
 
 export const signin = async (credentials: any) => {
   const response = await axiosWithCredentials.post( `${USERS_API}/signin`, credentials );
+  console.log("USERS_API:", USERS_API);
   return response.data;
 };
 export const signup = async (user: any) => {
