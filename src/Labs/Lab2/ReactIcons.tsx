@@ -3,10 +3,9 @@ import { FaCalendar, FaEnvelopeOpenText, FaRegClock }
 import { AiOutlineDashboard } from "react-icons/ai";
 import { FaBookBible } from "react-icons/fa6";
 import { VscAccount } from "react-icons/vsc";
-
-const ReactIcons = () => {
+export default function ReactIconsSampler() {
   return (
-<div id="wd-react-icons-sampler" className="mb-4">
+    <div id="wd-react-icons-sampler" className="mb-4">
       <h3>React Icons Sampler</h3>
       <div className="d-flex">
         <VscAccount className="fs-3 text" />
@@ -17,8 +16,6 @@ const ReactIcons = () => {
         <FaRegClock className="fs-3 text" />
       </div>
     </div>
-
   );
-};
+}
 
-export default ReactIcons;

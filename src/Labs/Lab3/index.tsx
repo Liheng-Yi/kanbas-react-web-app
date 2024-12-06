@@ -1,45 +1,47 @@
-import VariablesAndConstants from "./VariablesAndConstants";
-import VariableTypes from "./VariableTypes";
-import BooleanVariables from "./BooleanVariables";
-import IfElse from "./IfElse";
-import TernaryOperator from "./TernaryOperator";
-import ConditionalOutputInline from "./ConditionalOutputInline";
-import ConditionalOutputIfElse from "./ConditionalOutputIfElse";
-import ArrowFunctions from "./ArrowFunctions";
-import LegacyFunctions from "./LegacyFunctions";
-import ImpliedReturn from "./ImpliedReturn";
-import SimpleArrays from "./SimpleArrays";
-import ArrayIndexAndLength from "./ArrayIndexAndLength";
-import ForLoops from "./ForLoops";
 import AddingAndRemovingToFromArrays from "./AddingAndRemovingToFromArrays";
-import MapFunction from "./MapFunction";
+import ArrayIndexAndLength from "./ArrayIndexAndLength";
+import ArrowFunctions from "./ArrowFunctions";
+import BooleanVariables from "./BooleanVariables";
+import ConditionalOutputIfElse from "./ConditionalOutputIfElse";
+import ConditionalOutputInline from "./ConditionalOutputInline";
+import Destructing from "./Destructing";
+import FilterFunction from "./FilterFunction";
 import FindFunction from "./FindFunction";
 import FindIndex from "./FindIndex";
-import FilterFunction from "./FilterFunction";
-import House from "./House";
-import TodoItem from "./TodoItem";
-import TodoList from "./TodoList";
-import Spreading from "./Spreading";
-import Destructing from "./Destructing";
+import ForLoops from "./ForLoops";
 import FunctionDestructing from "./FunctionDestructing";
-import DestructingImports from "./DestructingImports";
-import Classes from "./Classes";
-import Styles from "./Styles";
+import House from "./House";
+import IfElse from "./IfElse";
+import ImpliedReturn from "./ImpliedReturn";
+import JsonStringify from "./JsonStringify";
+import LegacyFunctions from "./LegacyFunctions";
+import MapFunction from "./MapFunction";
+import SimpleArrays from "./SimpleArrays";
+import Spreading from "./Spreading";
+import TemplateLiterals from "./TemplateLiterals";
+import TernaryOperator from "./Ternaryoperator";
+import VariableTypes from "./VariableTypes";
+import VariablesAndConstants from "./VariablesAndConstants";
+import TodoItem from "./todos/TodoItem";
+import TodoList from "./todos/TodoList";
 import Add from "./Add";
 import Square from "./Square";
 import Highlight from "./Highlight";
-import AddPathParameters from "./AddPathParameters";
+import DestructingImports from "./DestructingImports";
+import Classes from "./Classes";
+import Styles from "./Styles";
 import PathParameters from "./PathParameters";
 import { useSelector } from "react-redux";
 
 
- export default function Lab3() {
+
+export default function Lab3() {
   console.log('Hello World!');
   const { todos } = useSelector((state: any) => state.todosReducer);
   return (
-    <div>
+    <div id='wd-lab3'>
       <h2>Lab 3</h2>
-            <ul className="list-group">
+      <ul className="list-group">
         {todos.map((todo: any) => (
           <li className="list-group-item" key={todo.id}>
             {todo.title}
@@ -52,19 +54,21 @@ import { useSelector } from "react-redux";
       <BooleanVariables />
       <IfElse />
       <TernaryOperator />
-      <ConditionalOutputInline />
       <ConditionalOutputIfElse />
-      <ArrowFunctions />
+      <ConditionalOutputInline />
       <LegacyFunctions />
+      <ArrowFunctions />
       <ImpliedReturn />
+      <TemplateLiterals />
       <SimpleArrays />
       <ArrayIndexAndLength />
-      <ForLoops />
       <AddingAndRemovingToFromArrays />
+      <ForLoops />
       <MapFunction />
       <FindFunction />
       <FindIndex />
       <FilterFunction />
+      <JsonStringify />
       <House />
       <TodoItem />
       <TodoList />
@@ -81,11 +85,14 @@ import { useSelector } from "react-redux";
       <Highlight>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
         vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
-      </Highlight>
-      <AddPathParameters />
-      <PathParameters />
-   
+     </Highlight>
+
+     <PathParameters />
+     <Styles />
+     <Styles />
+     <Styles />
+
 
     </div>
   );
-}
+}  

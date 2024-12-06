@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
+
 export default function TOC() {
   const { pathname } = useLocation();
   return (
@@ -44,10 +46,17 @@ export default function TOC() {
         </a>
       </li>
       <li className="nav-item">
-        <a id="wd-k" href="https://github.com/Liheng-Yi/kanbas-react-web-app" className="nav-link">
+        <a id="wd-k" href="https://github.com/ICE-CUBA/kanbas-react-web-app.git" target="_blank" className="nav-link">
           My GitHub
+        </a>
+      </li>
+      <li className="nav-item">
+        <a id="wd-k" href="https://github.com/ICE-CUBA/kanbas-node-server-app.git" target="_blank" className="nav-link">
+          Server
         </a>
       </li>
     </ul>
   );
 }
+
+  
