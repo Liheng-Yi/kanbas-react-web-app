@@ -19,7 +19,7 @@ import MapFunction from "./MapFunction";
 import SimpleArrays from "./SimpleArrays";
 import Spreading from "./Spreading";
 import TemplateLiterals from "./TemplateLiterals";
-import TernaryOperator from "./Ternaryoperator";
+
 import VariableTypes from "./VariableTypes";
 import VariablesAndConstants from "./VariablesAndConstants";
 import TodoItem from "./todos/TodoItem";
@@ -53,7 +53,6 @@ export default function Lab3() {
       <VariableTypes />
       <BooleanVariables />
       <IfElse />
-      <TernaryOperator />
       <ConditionalOutputIfElse />
       <ConditionalOutputInline />
       <LegacyFunctions />
