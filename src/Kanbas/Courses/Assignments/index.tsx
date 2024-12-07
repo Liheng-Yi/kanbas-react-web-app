@@ -1,125 +1,229 @@
-import { FaPlus } from "react-icons/fa6";
-import LessonControlButtons from "../Modules/LessonControlButtons";
-import AssignmentButtons from "./assignmentButton";
-import { AiOutlineCaretDown } from "react-icons/ai";
-import { BsGripVertical, BsTrash } from "react-icons/bs";
-import { FaRegEdit } from "react-icons/fa";
-import { useParams } from "react-router";
-import { Link } from "react-router-dom";
-import { Assignment, addAssignment, 
-  deleteAssignment, updateAssignment, editAssignment, setAssignment } from "./reducer";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import AssignmentCheck from "./AssignmentCheckButton";
+import AssignmentSearchBar from "./AssignmentSearch";
+import { BsGripVertical } from "react-icons/bs";
+import { FaPlus, FaBook, FaTrash } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { addAssignment, deleteAssignment, setAssignments } from "./reducer";
+import FacultyOnly from "../../Account/FacultyRounte";
 import * as assignmentsClient from "./client";
+
+import AssignmentsControlButton from "./AssignmentControlButton";
+
+// Define Assignment type
+interface Assignment {
+  _id: string;
+  title: string;
+  course: string;
+  description: string;
+  dueDate: string;
+  points: number;
+  availableFrom: string;
+  untilDate: string;
+}
+
+// Define RootState type
+interface RootState {
+  assignmentsReducer: {
+    assignments: Assignment[];
+  };
+}
 
 export default function Assignments() {
   const { cid } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showDialog, setShowDialog] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState<string | null>(null);
-  const assignments = useSelector((state: any) => 
-    state.assignmentsReducer.assignments);
 
-  const handleDeleteClick = (e: React.MouseEvent, assignmentId: string) => {
-    e.preventDefault();
-    setSelectedAssignment(assignmentId);
-    setShowDialog(true);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState<
+    string | null
+  >(null);
+
+  // NEW: Add loading state for initial data fetch
+  const [loading, setLoading] = useState(true);
+
+  // Use typed selector with debug logs
+  const assignments = useSelector((state: RootState) => {
+    console.log("Redux State:", state.assignmentsReducer); // Debug log
+    return state.assignmentsReducer.assignments.filter(
+      (assignment) => assignment.course === cid
+    );
+  });
+
+  console.log("Filtered Assignments:", assignments); // Debug log
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        // Debug log
+        console.log(
+          "Component - Starting to fetch assignments for course:",
+          cid
+        );
+        setLoading(true);
+        const assignments = await assignmentsClient.findAssignmentsForCourse(
+          cid!
+        );
+        // Debug log
+        console.log(
+          "Component - Successfully fetched assignments:",
+          assignments
+        );
+        dispatch(setAssignments(assignments));
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, [cid, dispatch]);
+
+  // UPDATED: handleDelete to use API
+  const handleDelete = (assignmentId: string) => {
+    // Debug log
+    console.log("Component - Starting delete for assignment:", assignmentId);
+    setSelectedAssignmentId(assignmentId);
+    setShowConfirmDelete(true);
   };
 
-  const handleConfirmDelete = async () => {
-    if (selectedAssignment) {
-        await assignmentsClient.deleteAssignment(selectedAssignment);
-        dispatch(deleteAssignment(selectedAssignment));
-        setShowDialog(false);
-        setSelectedAssignment(null);
+  // UPDATED: confirmDelete to use API
+  const confirmDelete = async () => {
+    if (selectedAssignmentId) {
+      try {
+        console.log(
+          "Component - Confirming delete for assignment:",
+          selectedAssignmentId
+        );
+        await assignmentsClient.deleteAssignment(selectedAssignmentId);
+        console.log("Component - Successfully deleted assignment");
+        dispatch(deleteAssignment(selectedAssignmentId));
+        setShowConfirmDelete(false);
+        setSelectedAssignmentId(null);
+      } catch (error) {
+        console.error("Error deleting assignment:", error);
+        alert("Failed to delete assignment. Please try again.");
+      }
     }
   };
-  const fetchAssignments = async () => {
-    const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
-    dispatch(setAssignment(assignments));
-  };
-  useEffect(() => {
-    fetchAssignments();
-  }, []);
-
 
   return (
-    <div id="wd-assignments" className="text-nowrap">
-      <div className="d-flex flex-row mb-3 gap-3">
-        <input id="wd-search-assignment" placeholder="text"
-          className="form-control float-start" value="🔍 Search....">
-        </input>
-        <button id="wd-view-progress-btn" className="btn btn-sm btn-white me-1 rounded-0">
-          <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-          Group</button>
-        <div id="wd-new-assignment-btn">
-        <Link to={`/Kanbas/Courses/${cid}/Assignments/new`} className="wd-assignment-link">
-          <button id="wd-collapse-all-btn" className="btn btn-sm btn-danger me-1 rounded-0">
-            <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
-            Assignment
-          </button>
-        </Link>
-        </div>
-      </div>
-
-      <ul id="wd-assignments-title" className="mt-2 list-group rounded-0 w-100">
-        <li className="list-group-item p-3 d-flex align-items-center justify-content-between bg-light" style={{ backgroundColor: '#f0f0f0' }}>
-          <div className="d-flex align-items-center">
-            <BsGripVertical className="me-2 fs-3" />
-            <AiOutlineCaretDown className="me-2" />
-            <h3 className="mb-0">ASSIGNMENT</h3>
-          </div>
-          <div className="ms-auto">
-            <AssignmentButtons />
-          </div>
-        </li>
-
-        {assignments
-          //.filter((assign: Assignment) => assign.course === cid)
-          .map((assign: Assignment) => (
-            <li key={assign._id} className="list-group-item d-flex align-items-center">
-              <BsGripVertical className="me-2 fs-3" />
-              <FaRegEdit size={30} className="me-3 text-success" />
-              <div className="flex-grow-1">
-                <Link 
-                  to={`/Kanbas/Courses/${cid}/Assignments/${assign._id}`} 
-                  className="wd-assignment-link">
-                  {assign.title}
-                </Link>
-                <p className="mb-0">
-                    <span className="text-danger">Multiple Modules</span> |
-                    <span className="fw-bold">Not available Until</span> |
-                    <span>{assign.available}</span> |<br />
-                    <span>Due {assign.due} | {assign.points} pts</span>
-                </p>
+    <div id="wd-assignments" className="px-4">
+      <AssignmentSearchBar />
+      <FacultyOnly>
+        <AssignmentsControlButton />
+      </FacultyOnly>
+      <br />
+      <br />
+      <br />
+      {/* NEW: Show loading state */}
+      {loading ? (
+        <div>Loading assignments...</div>
+      ) : (
+        <ul id="wd-assignments-titles" className="list-group rounded-0">
+          <li className="wd-assignments-title list-group-item p-0 fs-5 border-gray">
+            <div className="wd-title p-3 ps-2 bg-secondary d-flex justify-content-between align-items-center">
+              <div className="d-flex align-items-center">
+                <BsGripVertical className="me-3 fs-3" />
+                ASSIGNMENTS
               </div>
-              <button 
-                className="btn btn-danger me-2"
-                onClick={(e) => handleDeleteClick(e, assign._id)}
-              >
-                <BsTrash />
-              </button>
-              <LessonControlButtons />
-            </li>
-          ))}
-      </ul>
+              <span className="float-end badge rounded-pill text-bg-primary">
+                40% of Total
+              </span>
+            </div>
 
-      {showDialog && (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <ul className="wd-assignment list-group rounded-0">
+              {assignments && assignments.length > 0 ? (
+                assignments.map((assignment) => (
+                  <li
+                    key={assignment._id}
+                    className="wd-assignment list-group-item p-4"
+                    style={{
+                      paddingLeft: "20px",
+                      border: "1px solid #ddd",
+                      borderLeft: "4px solid green",
+                      marginBottom: "0",
+                      borderTop: "none",
+                    }}
+                  >
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <div className="d-flex align-items-center">
+                        <BsGripVertical className="me-3 fs-3" />
+                        <FaBook className="me-3 text-success" />
+                        <Link
+                          className="wd-assignment-link fs-5"
+                          to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                        >
+                          {assignment.title}
+                        </Link>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <AssignmentCheck />
+                        <FacultyOnly>
+                          <button
+                            className="btn btn-link text-danger ms-2"
+                            onClick={() => handleDelete(assignment._id)}
+                          >
+                            <FaTrash />
+                          </button>
+                        </FacultyOnly>
+                      </div>
+                    </div>
+                    <div className="text-muted ms-5">
+                      <span className="text-danger">Multiple Modules</span> |{" "}
+                      <strong>Not available until</strong>{" "}
+                      {assignment.availableFrom} |
+                      <br />
+                      <strong>Due:</strong> {assignment.dueDate} at 11:59pm |{" "}
+                      <strong>Points:</strong> {assignment.points} pts
+                    </div>
+                  </li>
+                ))
+              ) : (
+                <li className="list-group-item">
+                  No assignments available for this course
+                </li>
+              )}
+            </ul>
+          </li>
+        </ul>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showConfirmDelete && (
+        <div
+          className="modal show d-block"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          tabIndex={-1}
+        >
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Confirm Delete</h5>
-                <button type="button" className="btn-close" onClick={() => setShowDialog(false)}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowConfirmDelete(false)}
+                ></button>
               </div>
               <div className="modal-body">
                 Are you sure you want to delete this assignment?
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowDialog(false)}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowConfirmDelete(false)}
+                >
                   Cancel
                 </button>
-                <button type="button" className="btn btn-danger" onClick={handleConfirmDelete}>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={confirmDelete}
+                >
                   Delete
                 </button>
               </div>
@@ -127,6 +231,6 @@ export default function Assignments() {
           </div>
         </div>
       )}
-    </div >
+    </div>
   );
 }

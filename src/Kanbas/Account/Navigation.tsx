@@ -1,36 +1,26 @@
-import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function AccountNavigation() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { pathname } = useLocation();
+
+  // Define links based on whether the user is signed in
+  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
 
   return (
-    <div id="wd-account-navigation" className="list-group fs-5 rounded-0">
-      {!currentUser && (
-        <>
-          <Link 
-            to="/Kanbas/Account/Signin"
-            className={`list-group-item border border-0 ${pathname.includes("Signin") ? "text-danger" : ""}`}
-          >
-            Sign In
-          </Link>
-          <Link 
-            to="/Kanbas/Account/Signup"
-            className={`list-group-item border border-0 ${pathname.includes("Signup") ? "text-danger": ""}`}
-          >
-            Sign Up
-          </Link>
-        </>
+    <div id="wd-account-navigation">
+      {links.includes("Signin") && (
+        <Link to="/Kanbas/Account/Signin"> Signin </Link>
       )}
-      {currentUser && (
-        <Link 
-          to="/Kanbas/Account/Profile"
-          className="list-group-item text-danger border border-0"
-        >
-          Profile
-        </Link>
+      <br />
+      {links.includes("Signup") && (
+        <Link to="/Kanbas/Account/Signup"> Signup </Link>
       )}
+      <br />
+      {links.includes("Profile") && (
+        <Link to="/Kanbas/Account/Profile"> Profile </Link>
+      )}
+      <br />
     </div>
   );
 }

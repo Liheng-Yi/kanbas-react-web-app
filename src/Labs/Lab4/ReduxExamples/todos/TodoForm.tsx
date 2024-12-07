@@ -1,28 +1,35 @@
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { addTodo, updateTodo, setTodo } from "./todosReducer";
 
 export default function TodoForm() {
-    const { todo } = useSelector((state:any) => state.todosReducer);
-    const dispatch = useDispatch();
-    return (
-        <li className="list-group-item d-flex align-items-center gap-2">
-            <input
-                style={{ width: '30%' }} 
-                className="form-control"
-                defaultValue={todo.title}
-                onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))} />
-            <button 
-                className="btn btn-warning text-dark float-right"
-                onClick={() => dispatch(updateTodo(todo))}>
-                Update
-            </button>
-            <button 
-                className="btn btn-success text-white float-right"
-                onClick={() => dispatch(addTodo(todo))}>
-                Add
-            </button>
-            
-        </li>
-    );
-}
+  const { todo } = useSelector((state: any) => state.todosReducer);
+  const dispatch = useDispatch();
 
+  return (
+    <li className="list-group-item d-flex align-items-center">
+      <input
+        type="text"
+        className="form-control me-2"
+        style={{ width: "200px" }} // Adjust the width as needed
+        placeholder="Enter task"
+        defaultValue={todo.title}
+        onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}
+      />
+      <button
+        onClick={() => dispatch(updateTodo(todo))}
+        id="wd-update-todo-click"
+        className="btn btn-warning me-2"
+      >
+        Update
+      </button>
+      <button
+        onClick={() => dispatch(addTodo(todo))}
+        id="wd-add-todo-click"
+        className="btn btn-success"
+      >
+        Add
+      </button>
+    </li>
+  );
+}

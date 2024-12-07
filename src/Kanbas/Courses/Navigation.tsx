@@ -1,14 +1,40 @@
-import { Link, useLocation, useParams} from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 
 export default function CoursesNavigation() {
-  const { cid } = useParams();
-  const { pathname } = useLocation();
-  const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
+  // Get the current course ID (cid) from the URL using useParams
+  const { cid } = useParams<{ cid: string }>();
+
+  // Get the current location to determine which link is active
+  const location = useLocation();
+
+  // Array of links for the course navigation
+  const links = [
+    "Home",
+    "Modules",
+    "Piazza",
+    "Zoom",
+    "Assignments",
+    "Quizzes",
+    "Grades",
+    "People",
+  ];
+
   return (
-    <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
-      {links.map((course) => (
-            <Link id={`"wd-course-${course}-link"`}    to={`/Kanbas/Courses/${cid}/${course}`}
-            className={`list-group-item border border-0 ${pathname.includes(course) ? "text-black" : "text-danger"}`}>{course}</Link>
-          ))}
+    <div
+      className="wd list-group rounded-0 d-none d-md-block"
+      id="wd-courses-navigation"
+    >
+      {links.map((link) => (
+        <Link
+          key={link}
+          className={`list-group-item border-0 ${
+            location.pathname.includes(link) ? "active" : "text-danger"
+          }`}
+          to={`/Kanbas/Courses/${cid}/${link}`}
+        >
+          {link}
+        </Link>
+      ))}
     </div>
-    );}
+  );
+}

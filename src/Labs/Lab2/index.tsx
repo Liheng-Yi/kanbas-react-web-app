@@ -1,101 +1,165 @@
-import BackgroundColors from "./BackgroundColors";
-import BootstrapForms from "./BootstrapForms";
-import BootstrapGrids from "./BootstrapGrids";
-import BootstrapLists from "./BootstrapLists";
-import BootstrapNavigation from "./BootstrapNavigation";
-import BootstrapTables from "./BootstrapTables";
-import Borders from "./Borders";
-import Corners from "./Corners";
-import Dimensions from "./Dimensions";
-import Flex from "./Flex";
-import Flaot from "./Float";
-import ForegroundColors from "./ForegroundColors";
-import GridLayout from "./GridLayout";
-import Margins from "./Margins";
-import Padding from "./Padding";
-import Positions from "./Positions";
-import ReactIconsSampler from "./ReactIcons";
-import ScreenSizeLabel from "./ScreenSizeLabel";
-import Zindex from "./Zindex";
 import "./index.css";
-
+import Corners from "./corners";
+import Foreground from "./foregroundColor";
+import Background from "./backgroundColor";
+import Padding from "./padding";
+import Position from "./position";
+import Margin from "./margins";
+import Dimension from "./Dimensions";
+import ZIndex from "./Zindex";
+import Float from "./float";
+import GirdLayout from "./GirdLayout";
+import Flex from "./flex";
+import ReactIconsSampler from "./Reacticons";
+import "bootstrap/dist/css/bootstrap.min.css";
+import BootstrapGird from "./BootstrapGirds";
+import ScreenSizeLabel from "./ScreenSizeLabel";
+import BootstrapTable from "./BootstrapTables";
+import BootStrapList from "./BootstrapLists";
+import BootstrapForm from "./BootStrapForms";
+import BootstrapNavigation from "./BootstrapNavigation";
 export default function Lab2() {
   return (
     <div className="container">
       <h2>Lab 2 - Cascading Style Sheets</h2>
       <h3>Styling with the STYLE attribute</h3>
-      <p /*style={{ backgroundColor: "blue",
-                  color: "white" }} */>
-        Style attribute allows configuring look and feel
-        right on the element. Although it's very convenient
-        it is considered bad practice and you should avoid
-        using the style attribute
-      </p>
-
       <div id="wd-css-id-selectors">
-        <h3>ID selectors</h3>
+        <h3> ID selectors </h3>
         <p id="wd-id-selector-1">
-Instead of changing the look and feel of all the 
-elements of the same name, e.g., P, we can refer to a specific element by its ID
+          Instead of changing the look and feel of all the elements of the same
+          name, e.g., P, we can refer to a specific element by its ID{" "}
         </p>
         <p id="wd-id-selector-2">
-Here's another paragraph using a different ID and a different look and
+          Here's another paragraph using a different ID and a different look and
           feel
         </p>
       </div>
-
-      <div id="wd-css-class-selectors">
-        <h3>Class selectors</h3>
-        <p className="wd-class-selector">
-      Instead of using IDs to refer to elements, you can use an element's CLASS attribute
-        </p>
-        <h4 className="wd-class-selector">
-      This heading has same style as paragraph above
-        </h4>
-      </div>
-
-      <div id="wd-css-document-structure">
-        <div className="wd-selector-1">
-          <h3>Document structure selectors</h3>
-          <div className="wd-selector-2">
-            Selectors can be combined to refer elements in particular
-            places in the document
-            <p className="wd-selector-3">
-              This paragraph's red background is referenced as
-              <br />
-              .selector-2 .selector3<br />
-              meaning the descendant of some ancestor.<br />
-              <span className="wd-selector-4">
-                Whereas this span is a direct child of its parent
-              </span><br />
-                You can combine these relationships to create specific 
-                styles depending on the document structure
-            </p>
-          </div>
+      <p>
+        Style attribute allows configuring look and feel right on the element.
+        Although it's very convenient it is considered bad practice and you
+        should avoid using the style attribute
+      </p>
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolor facilis
+        id nulla consequuntur quam, autem quia error, atque repellat reiciendis
+        placeat itaque harum commodi fuga. Recusandae, modi neque. Aliquid,
+        reprehenderit!
+      </p>
+      <h2>Colors</h2>
+      <h3 className="wd-fg-color-blue">Foreground color</h3>
+      <p className="wd-fg-color-red">
+        The text in this paragraph is red but
+        <span className="wd-fg-color-green">this text is green</span>
+      </p>
+      <h3 className="wd-bg-color-blue wd-fg-color-white">Background color</h3>
+      <p className="wd-bg-color-red wd-fg-color-black">
+        This background of this paragraph is red but
+        <span
+          className="wd-bg-color-green
+                     wd-fg-color-white"
+        >
+          the background of this text is green and the foreground white
+        </span>
+      </p>
+      <h1
+        style={{
+          backgroundColor: "yellow",
+        }}
+      >
+        Block vs inline elements
+      </h1>
+      <p
+        style={{
+          backgroundColor: "blue",
+          color: "white",
+          padding: "10px",
+          marginTop: "50px",
+        }}
+      >
+        Headings ... width
+      </p>
+      Normal text renders inline
+      <br />
+      <br />
+      <span
+        style={{
+          backgroundColor: "red",
+          color: "white",
+          borderStyle: "solid",
+          borderBottomWidth: "10px",
+          borderTopWidth: "20px",
+          borderLeftWidth: "30px",
+          borderRightWidth: "40px",
+          borderColor: "green",
+        }}
+      >
+        Span elements
+      </span>
+      <span
+        style={{
+          backgroundColor: "red",
+          color: "white",
+        }}
+      >
+        render inline
+      </span>
+      with the rest of the content
+      <p
+        className="wd-border-fat wd-border-red
+                wd-border-solid"
+      >
+        Solid fat red border
+      </p>
+      <p
+        className="wd-border-thin wd-border-blue
+                wd-border-dashed"
+      >
+        Dashed thin blue border
+      </p>
+      {/* #slides 15 */}
+      {/* <div id="wd-css-margins">
+        <h2>Margins</h2>
+        <div
+          className="wd-margin-bottom wd-padded-top-left 
+      wd-border-fat wd-border-red wd-border-solid 
+      wd-bg-color-yellow"
+        >
+          Margin bottom{" "}
         </div>
-      </div>
-
-      <ForegroundColors />
-      <BackgroundColors />
-      <Borders />
+        <div
+          className="wd-margin-right-left wd-padded-bottom-right 
+      wd-border-fat wd-border-blue  wd-border-solid 
+      wd-bg-color-yellow"
+        >
+          Margin left right{" "}
+        </div>
+        <div
+          className="wd-margin-all-around 
+      wd-padding-fat wd-border-fat 
+      wd-border-yellow wd-border-solid 
+      wd-bg-color-blue wd-fg-color-white"
+        >
+          Margin all around{" "}
+        </div>
+      </div> */}
+      <Foreground />
+      <Background />
       <Padding />
-      <Margins />
+      <Margin />
       <Corners />
-      <Dimensions />
-      <Positions />
-      <Zindex />
-      <Flaot />
-      <GridLayout />
-      <Flex  />
+      <Dimension />
+      <Position />
+      <ZIndex />
+      <Float />
+      <GirdLayout />
+      <Flex />
       <ReactIconsSampler />
-      <BootstrapGrids />
+      <BootstrapGird />
       <ScreenSizeLabel />
-      <BootstrapTables />
-      <BootstrapLists />
-      <BootstrapForms />
+      <BootstrapTable />
+      <BootStrapList />
+      <BootstrapForm />
       <BootstrapNavigation />
-
-
     </div>
   );
 }
