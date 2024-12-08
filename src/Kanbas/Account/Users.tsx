@@ -29,6 +29,7 @@ export default function Users() {
   };
  const fetchUsers = async () => {
    const users = await client.findAllUsers();
+   console.log("users", users);
    setUsers(users);
  };
  useEffect(() => {
@@ -61,6 +62,7 @@ export default function Users() {
         <option value="TA">Assistants</option> <option value="FACULTY">Faculty</option>
         <option value="ADMIN">Administrators</option>
       </select>
+
      <PeopleTable users={users} />
    </div>
 );}

@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 
 
 export default function PeopleTable({ users = [] }: { users?: any[] }) {
-  console.log("Users in PeopleTable:", users);
-  
   return (
     <div id="wd-people-table">
       <PeopleDetails />
@@ -15,25 +13,25 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
           <tr><th>Name</th><th>Login ID</th><th>Section</th><th>Role</th><th>Last Activity</th><th>Total Activity</th><th>Email</th></tr>
         </thead>
         <tbody>
-          {users
-            .map((user: any) => (
+          {users && users.map((user: any) => user && (
               <tr key={user._id}>
                 <td className="wd-full-name text-nowrap">
                   <Link to={`/Kanbas/Account/Users/${user._id}`} className="text-decoration-none">
                     <FaUserCircle className="me-2 fs-1 text-secondary" />
-                    <span className="wd-first-name">{user.firstName} </span>
-                    <span className="wd-last-name">{user.lastName}</span>
+                    <span className="wd-first-name">{user?.firstName} </span>
+                    <span className="wd-last-name">{user?.lastName}</span>
                   </Link>
                 </td>
-                <td className="wd-login-id">{user.loginId}</td>
-                <td className="wd-section">{user.section}</td>
-                <td className="wd-role">{user.role}</td>
-                <td className="wd-last-activity">{user.lastActivity}</td>
-                <td className="wd-total-activity">{user.totalActivity}</td>
-                <td className="wd-email">{user.email}</td>
+                <td className="wd-login-id">{user?.loginId}</td>
+                <td className="wd-section">{user?.section}</td>
+                <td className="wd-role">{user?.role}</td>
+                <td className="wd-last-activity">{user?.lastActivity}</td>
+                <td className="wd-total-activity">{user?.totalActivity}</td>
+                <td className="wd-email">{user?.email}</td>
               </tr>
             ))}
         </tbody>
       </table>
-    </div>);
+    </div>
+  );
 }

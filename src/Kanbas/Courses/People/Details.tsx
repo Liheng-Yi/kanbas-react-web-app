@@ -5,7 +5,6 @@ import { useParams, useNavigate } from "react-router";
 import { FaCheck } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 
-import { Link } from "react-router-dom";
 import * as client from "../../Account/client";
 export default function PeopleDetails() {
     const { uid } = useParams();
@@ -89,9 +88,6 @@ export default function PeopleDetails() {
                         </select>
                     </div>)}
             </b>
-            <span className="wd-roles">
-                {user.role}
-            </span> <br />
             <b>Login ID:</b>        <span className="wd-login-id">      {user.loginId}      </span> <br />
             <b>Email:</b>           <span className="wd-email">          {!editing && (
                 <FaPencil onClick={() => setEditing(true)}
@@ -120,3 +116,4 @@ export default function PeopleDetails() {
 
     );
 }
+
